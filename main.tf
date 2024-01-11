@@ -30,6 +30,9 @@ resource "aws_instance" "public_instance" {
   key_name = aws_key_pair.autodeploy.key_name
   vpc_security_group_ids = [aws_security_group.ssh_access.id]
 
+tags = {
+    Name = var.name_tag,
+  }
 
 }
 
