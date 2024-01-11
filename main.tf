@@ -6,7 +6,7 @@ resource "aws_key_pair" "autodeploy" {
 resource "aws_security_group" "ssh_access" {
        name        = "ssh_access"
        description = "Allow inbound ssh access"
-       vpc_id      = "${aws_vpc.my_vpc.id}"
+       vpc_id      = "vpc-00d0891ec7b1c9c7d"
        tags {
          Name = "inbound_ssh_access"
        }
