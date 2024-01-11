@@ -23,6 +23,14 @@ resource "aws_security_group" "ssh_access" {
          protocol    = "-1"
          cidr_blocks = ["0.0.0.0/0"]
        }
+
+resource "aws_instance" "public_instance" {
+  ami           = var.ami
+  instance_type = var.instance_type
+  key_name = aws_key_pair.autodeploy.key_name
+  vpc_security_group_ids = [aws_security_group.ssh_access.id]
+
+
 }
 
 resource "aws_instance" "public_instance" {
