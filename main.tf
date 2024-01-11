@@ -3,6 +3,31 @@ resource "aws_key_pair" "autodeploy" {
   public_key = file("/var/jenkins_home/.ssh/id_rsa.pub")
 }
 
+resource "aws_security_group" "ssh_access" {
+       name        = "ssh_access"
+       description = "Allow inbound ssh access"
+       vpc_id      = "${aws_vpc.my_vpc.id}"
+       tags {
+         Name = "inbound_ssh_access"
+       }
+
+       # Inbound Access
+       ingress {
+         from_port   = "22"
+         to_port     = "22"
+         protocol    = "TCP"
+         cidr_blocks = ["207.81.126.111/32"]
+       }
+
+       # Outbound Access    
+       egress {
+         from_port   = 0
+         to_port     = 0
+         protocol    = "-1"
+         cidr_blocks = ["0.0.0.0/0"]
+       }
+}
+
 resource "aws_instance" "public_instance" {
   ami           = var.ami
   instance_type = var.instance_type
