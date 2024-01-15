@@ -1,7 +1,7 @@
 resource "aws_key_pair" "autodeploy" {
   key_name   = "autodeploy"  # Set a unique name for your key pair
 # Uncomment if you are running terraform with Jenkins
-@  public_key = file("/var/jenkins_home/.ssh/id_rsa.pub")
+#  public_key = file("/var/jenkins_home/.ssh/id_rsa.pub")
 # Uncomment if you are running terraform stand alone
   public_key = file("~/.ssh/id_rsa.pub")
 }
