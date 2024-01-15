@@ -3,7 +3,7 @@ resource "aws_key_pair" "autodeploy" {
 # Uncomment if you are running terraform with Jenkins
   public_key = file("/var/jenkins_home/.ssh/id_rsa.pub")
 # Uncomment if you are running terraform stand alone
-#  public_key = file("/var/jenkins_home/.ssh/id_rsa.pub")
+#  public_key = file("~/.ssh/id_rsa.pub")
 }
 
 resource "aws_security_group" "ssh_access" {
