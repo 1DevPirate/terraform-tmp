@@ -16,7 +16,7 @@ resource "aws_security_group" "ssh_access" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["207.81.126.111/32"]
+    cidr_blocks = ["192.184.200.217/32"]
   }
 
   # Outbound Access
@@ -29,12 +29,31 @@ resource "aws_security_group" "ssh_access" {
 }
 
 resource "aws_instance" "public_instance" {
-  ami           = var.ami
-  instance_type = var.instance_type
-  key_name      = aws_key_pair.autodeploy.key_name
-  vpc_security_group_ids = [aws_security_group.ssh_access.id]
+  ami                      = var.ami
+  instance_type            = var.instance_type
+  key_name                 = aws_key_pair.autodeploy.key_name
+  vpc_security_group_ids   = [aws_security_group.ssh_access.id]
 
   tags = {
     Name = var.name_tag,
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"  # Replace with your instance user
+    private_key = file("~/.ssh/id_rsa")  # Specify the path to your private key
+    host        = self.public_ip  # Use self.public_ip to get the public IP dynamically
+  }
+
+  provisioner "file" {
+    source      = "server_prep.sh"
+    destination = "/tmp/server_prep.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/server_prep.sh",
+      "/tmp/server_prep.sh args",
+    ]
   }
 }
